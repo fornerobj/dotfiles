@@ -12,8 +12,7 @@ return {
       local ui = require "dapui"
 
       require("dapui").setup()
-
-      require("nvim-dap-virtual-text").setup()
+      require("nvim-dap-virtual-text").setup({})
 
       -- Handled by nvim-dap-go
       -- dap.adapters.go = {
@@ -44,6 +43,40 @@ return {
       --     },
       --   }
       -- end
+
+
+      dap.configurations.cpp = {
+        {
+          name = "C++ Debug And Run",
+          type = "codelldb",
+          request = "launch",
+          program = function()
+            -- First, check if exists CMakeLists.txt
+            local fileName = vim.fn.expand("%:t:r")
+            -- create this directory
+            os.execute("mkdir -p " .. "bin")
+            local cmd = "!g++ -g % -o " .. fileName
+            -- First, compile it
+            vim.cmd(cmd)
+            -- Then, return it
+            return "${fileDirname}/" .. fileName
+          end,
+          cwd = "${workspaceFolder}",
+          stopOnEntry = false,
+          runInTerminal = true,
+          console = "integratedTerminal",
+        },
+      }
+
+      local mason_path = vim.fn.stdpath('data') .. '/mason/packages/codelldb/extension/adapter/codelldb'
+      dap.adapters.codelldb = {
+        type = "server",
+        port = "${port}",
+        executable = {
+          command = mason_path,
+          args = { "--port", "${port}" },
+        }
+      }
 
       vim.keymap.set("n", "<space>b", dap.toggle_breakpoint)
       vim.keymap.set("n", "<space>gb", dap.run_to_cursor)
