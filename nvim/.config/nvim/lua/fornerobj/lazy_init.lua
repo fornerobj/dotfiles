@@ -17,6 +17,3 @@ require("lazy").setup({
     spec = "fornerobj.plugins",
     change_detection = { notify = false }
 })
-
-require("mason").setup()
-
