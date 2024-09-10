@@ -44,6 +44,28 @@ return {
       --   }
       -- end
 
+      ui.setup({
+        layouts = {
+          {
+            -- Left sidebar with variables (scopes) and watches
+            elements = {
+              { id = "scopes", size = 0.75 },  -- Shows variables and their values
+              { id = "watches", size = 0.25 }, -- Optional: to watch specific variables
+            },
+            size = 40,  -- Width of the sidebar
+            position = "left",  -- Open on the left side
+          },
+          {
+            -- Bottom panel with repl and console
+            elements = {
+              { id = "repl", size = 0.5 },
+              { id = "console", size = 0.5 },
+            },
+            size = 10,
+            position = "bottom",  -- Open at the bottom
+          },
+        },
+      })
 
       dap.configurations.cpp = {
         {
@@ -54,8 +76,7 @@ return {
             -- First, check if exists CMakeLists.txt
             local fileName = vim.fn.expand("%:t:r")
             -- create this directory
-            os.execute("mkdir -p " .. "bin")
-            local cmd = "!g++ -g % -o " .. fileName
+            local cmd = "!g++ -g *.cpp -o " .. fileName
             -- First, compile it
             vim.cmd(cmd)
             -- Then, return it
@@ -75,6 +96,9 @@ return {
         executable = {
           command = mason_path,
           args = { "--port", "${port}" },
+          options = {
+            terminal = "/usr/bin/env bash",
+          },
         }
       }
 
@@ -91,7 +115,7 @@ return {
       vim.keymap.set("n", "<F3>", dap.step_over)
       vim.keymap.set("n", "<F4>", dap.step_out)
       vim.keymap.set("n", "<F5>", dap.step_back)
-      vim.keymap.set("n", "<F13>", dap.restart)
+      vim.keymap.set("n", "<F12>", dap.restart)
 
       dap.listeners.before.attach.dapui_config = function()
         ui.open()
