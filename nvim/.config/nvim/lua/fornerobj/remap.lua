@@ -18,5 +18,14 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Open diagnostics' })
 
--- Surround highlighted text with parentheses
-vim.keymap.set('v', '<leader>s', 'xi()<Esc>P', { desc = 'Surround selection with parentheses' })
+-- Surround highlighted text with parentheses or quotes
+vim.keymap.set('v', '<leader>s(', 'xi()<Esc>P', { desc = 'Surround selection with parentheses' })
+vim.keymap.set('v', '<leader>s\'', 'xi\'\'<Esc>P', { desc = 'Surround selection with parentheses' })
+vim.keymap.set('v', '<leader>s\"', 'xi\"\"<Esc>P', { desc = 'Surround selection with parentheses' })
+
+-- open a terminal in a vertical split
+vim.keymap.set('n', '<leader>vt', function()
+  vim.cmd("set splitright")
+  vim.cmd('vsplit')
+  vim.cmd('terminal')
+end, { desc = 'Open terminal in a vertical split on the right' })
