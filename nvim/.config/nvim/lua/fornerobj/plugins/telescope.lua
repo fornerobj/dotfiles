@@ -34,10 +34,23 @@ return {
             --   },
             -- },
             -- pickers = {}
+            defaults = {
+                vimgrep_arguments = {
+                    'rg',
+                    '--color=never',
+                    '--no-heading',
+                    '--with-filename',
+                    '--line-number',
+                    '--column',
+                    '--smart-case',
+                    '--hidden', -- Add this to include hidden files
+                },
+            },
             extensions = {
                 ['ui-select'] = {
                     require('telescope.themes').get_dropdown(),
                 },
+                fzf = {}
             },
         })
 
@@ -46,7 +59,11 @@ return {
         pcall(require('telescope').load_extension, 'ui-select')
 
         local builtin = require('telescope.builtin')
-        vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+        vim.keymap.set('n', '<leader>ff', function()
+            builtin.find_files({
+                hidden = true, -- Include hidden files
+            })
+        end, { desc = 'Find files including hidden' })
         vim.keymap.set('n', '<leader>fgf', builtin.git_files, {})
         vim.keymap.set('n', '<leader>fw', builtin.live_grep, {desc = 'Live grep in project'})
         vim.keymap.set('n', '<leader>ps', function()
