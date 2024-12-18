@@ -15,5 +15,9 @@ vim.g.mapleader = " "
 
 require("lazy").setup({
     spec = "fornerobj.plugins",
-    change_detection = { notify = false }
+    change_detection = { notify = false },
+    checker = {
+        enabled = true,
+        notify = false,
+    }
 })
